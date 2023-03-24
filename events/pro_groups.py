@@ -4,10 +4,12 @@ import discord
 with open('config.json') as f:
     config = json.load(f)
 
+pro_groups = {}
+
 
 async def add_pro_group_channel(member, role):
-    category = client.get_channel(1077796703408762951)
-    channel_name = f"Pro Group - {role.name}"
+    category = client.get_channel(config.pro_group_category_id)
+    channel_name = f"Leads - {role.name}"
     existing_channel = discord.utils.get(category.channels, name=channel_name)
     if existing_channel:
         await member.add_roles(existing_channel)
@@ -27,7 +29,7 @@ async def handle_pro_role_change(before, after):
         return
     if pro_role not in before.roles:
         # Pro role was added, assign member to pro group
-        if "Pro Group" not in [r.name for r in after.roles]:
+        if config.pro_role_suffix not in [r.name for r in after.roles]:
             pro_group_num = 1
             for role in pro_groups.values():
                 if len(role.members) < 5:
@@ -44,7 +46,7 @@ async def handle_pro_role_change(before, after):
 
 
 async def remove_pro_group_channel(member, role):
-    channel_name = f"Pro Group - {role.name}"
+    channel_name = f"Leads - {role.name}"
     existing_channel = discord.utils.get(
         member.guild.channels, name=channel_name)
     if existing_channel:

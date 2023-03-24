@@ -3,7 +3,7 @@
 import os
 import discord
 from discord.ext import commands
-from events import pro_groups
+from .events import pro_groups
 
 intents = discord.Intents.default()
 intents.members = True
