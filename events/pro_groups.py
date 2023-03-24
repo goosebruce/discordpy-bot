@@ -8,7 +8,9 @@ pro_groups = {}
 
 
 async def add_pro_group_channel(member, role):
-    category = client.get_channel(config.get('pro_group_category_id'))
+    print(config.get('pro_group_category_id'))
+    print(client)
+    category = client.get_channel('1077796703408762951')
     print(category)
     channel_name = f"Leads - {role.name}"
     existing_channel = discord.utils.get(category.channels, name=channel_name)
