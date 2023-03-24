@@ -3,24 +3,27 @@
 import os
 import discord
 from discord.ext import commands
-
+from events import pro_groups
 
 intents = discord.Intents.default()
-intents.message_content = True
-bot = commands.Bot(command_prefix='!', intents=intents)
+intents.members = True
+client = commands.Bot(command_prefix='!', intents=intents)
+
+pro_groups.client = client
 
 
-@bot.event
+@client.event
 async def on_ready():
-    print(f"Logged in as {bot.user}")
+    print('Bot is ready')
 
-@bot.command()
+
+@client.event
+async def on_member_update(before, after):
+    await pro_groups.handle_pro_role_change(before, after)
+
+
+@client.command()
 async def ping(ctx):
-    await ctx.send('pong')
+    await ctx.send('Pong!')
 
-@bot.command()
-async def hello(ctx):
-    await ctx.send("Choo choo! 🚅")
-
-
-bot.run(os.environ["DISCORD_TOKEN"])
+client.run(os.environ["DISCORD_TOKEN"])
