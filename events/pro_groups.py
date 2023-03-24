@@ -8,7 +8,7 @@ pro_groups = {}
 
 
 async def add_pro_group_channel(member, role):
-    category = client.get_channel(config.pro_group_category_id)
+    category = client.get_channel(config.get('pro_group_category_id'))
     channel_name = f"Leads - {role.name}"
     existing_channel = discord.utils.get(category.channels, name=channel_name)
     if existing_channel:
@@ -20,6 +20,7 @@ async def add_pro_group_channel(member, role):
 
 async def handle_pro_role_change(before, after):
     pro_role = discord.utils.get(after.roles, name="Pro")
+    print(config)
     if pro_role is None:
         # Pro role was removed, remove all pro group roles from member
         for role in pro_groups.values():
