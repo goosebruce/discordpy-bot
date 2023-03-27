@@ -9,7 +9,8 @@ pro_groups = {}
 
 async def add_pro_group_channel(member, role):
     channel_name = f"Leads - {role.name}"
-    id = '1077796703408762951'
+    id = 1077796703408762951
+    print(member.guild.categories)
     category = discord.utils.get(member.guild.categories, id=id)
     existing_channel = discord.utils.get(category.channels, name=channel_name)
     if existing_channel:
@@ -43,7 +44,6 @@ async def handle_pro_role_change(before, after):
             await new_role.edit(position=after.guild.get_role(after.guild.id).position + 1)
             await after.add_roles(new_role)
             pro_groups[new_role.id] = new_role
-            print(after.roles)
             await add_pro_group_channel(after, new_role)
 
 
