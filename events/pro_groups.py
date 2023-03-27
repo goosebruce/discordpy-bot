@@ -18,7 +18,7 @@ async def add_pro_group_channel(member, role):
             overwrites = {
                 member.guild.default_role: discord.PermissionOverwrite(read_messages=False),
                 role: discord.PermissionOverwrite(
-                    read_messages=True, send_messages=True)
+                    read_messages=True, send_messages=False)
             }
             new_channel = await category.create_text_channel(name=channel_name, overwrites=overwrites)
         else:
@@ -47,7 +47,7 @@ async def handle_pro_role_change(before, after):
                     return
                 else:
                     pro_group_num += 1
-            new_role = await after.guild.create_role(name=f"Pro Group - {pro_group_num}")
+            new_role = await after.guild.create_role(name=f"Pro Group - {pro_group_num}", colour='0xE91E63')
             await new_role.edit(position=after.guild.get_role(after.guild.id).position + 1)
             await after.add_roles(new_role)
             pro_groups[new_role.id] = new_role
