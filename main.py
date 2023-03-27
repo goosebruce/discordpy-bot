@@ -1,8 +1,11 @@
 import os
 import discord
 from discord.ext import commands
-import mysql.connector
-import fastapi
+from fastapi import FastAPI, HTTPException, Request
+from pydantic import BaseModel
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 
 from events import pro_groups
 
@@ -32,12 +35,63 @@ async def ping(ctx):
 client.run(os.environ["DISCORD_TOKEN"])
 
 
-####API for webhooks
-app = fastapi.FastAPI()
+#### API ####
+
+app = FastAPI()
+
+# MySQL database configuration
+user = os.getenv("MYSQLUSER")
+password = os.getenv("MYSQLPASSWORD")
+host = os.getenv("MYSQLHOST")
+port = os.getenv("MYSQLPORT")
+dbname = os.getenv("MYSQLDATABASE")
+
+SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{user}:{password}@{host}:{port}/{dbname}"
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+
+class WebhookData(Base):
+    __tablename__ = "whop_data"
+    id = Column(Integer, primary_key=True, index=True)
+    data = Column(Text)
+
+
+Base.metadata.create_all(bind=engine)
+
+
+# Define Pydantic model for webhook data
+class Webhook(BaseModel):
+    data: str
+
+
+# Define FastAPI route to receive webhook requests
+@app.post("/whopWebhook")
+async def receive_webhook(webhook: Webhook):
+    try:
+        # Create new database session
+        db = SessionLocal()
+
+        # Create new webhook data object and store it in the database
+        new_webhook = WebhookData(data=webhook.data)
+        db.add(new_webhook)
+        db.commit()
+        db.refresh(new_webhook)
+
+        # Close database session
+        db.close()
+
+        # Return success response
+        return {"message": "Webhook data stored successfully!"}
+    except Exception as e:
+        # Rollback database changes and return error response
+        db.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/sendEmbed")
-async def sendEmbed(request: fastapi.Request):
+async def sendEmbed(request: Request):
     body = await request.json()
     channel = client.get_channel(body["channel"])
     embed = discord.Embed(
