@@ -10,7 +10,7 @@ pro_groups = {}
 async def add_pro_group_channel(member, role):
     channel_name = f"Leads - {role.name}"
     name = 'PRO MEMBERS'
-    category = discord.utils.get(client.guild.categories, name=name)
+    category = discord.utils.get(member.guild.categories, name=name)
     existing_channel = discord.utils.get(category.channels, name=channel_name)
     if existing_channel:
         await member.add_roles(existing_channel)
