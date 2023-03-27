@@ -7,7 +7,7 @@ with open('config.json') as f:
 pro_groups = {}
 
 
-async def add_pro_group_channel(member, role):
+async def add_pro_group_channel(member, role) -> None:
     channel_name = f"Leads - {role.name}"
     id = 1077796703408762951
     print(member.guild.categories)
@@ -22,12 +22,12 @@ async def add_pro_group_channel(member, role):
             }
             new_channel = await category.create_text_channel(name=channel_name, overwrites=overwrites)
         else:
-            print('New channel: %s created' % new_channel)
+            print(f'New channel: {new_channel} created')
     else:
-        print('Channel already exists: %s' % channel_name)
+        print(f'Channel already exists:{channel_name}')
 
 
-async def handle_pro_role_change(before, after):
+async def handle_pro_role_change(before, after) -> None:
     pro_role = discord.utils.get(after.roles, name="Pro")
     if pro_role is None:
         # Pro role was removed, remove all pro group roles from member
@@ -47,14 +47,14 @@ async def handle_pro_role_change(before, after):
                     return
                 else:
                     pro_group_num += 1
-            new_role = await after.guild.create_role(name=f"Pro Group - {pro_group_num}", colour='0xE91E63')
+            new_role = await after.guild.create_role(name=f"Pro Group - {pro_group_num}", color=discord.monkey)
             await new_role.edit(position=after.guild.get_role(after.guild.id).position + 1)
             await after.add_roles(new_role)
             pro_groups[new_role.id] = new_role
             await add_pro_group_channel(after, new_role)
 
 
-async def remove_pro_group_channel(member, role):
+async def remove_pro_group_channel(member, role) -> None:
     channel_name = f"Leads - {role.name}"
     existing_channel = discord.utils.get(
         member.guild.channels, name=channel_name)
