@@ -43,6 +43,7 @@ async def handle_pro_role_change(before, after):
             await new_role.edit(position=after.guild.get_role(after.guild.id).position + 1)
             await after.add_roles(new_role)
             pro_groups[new_role.id] = new_role
+            print(after.roles)
             await add_pro_group_channel(after, new_role)
 
 
