@@ -13,11 +13,18 @@ async def add_pro_group_channel(member, role):
     print(member.guild.categories)
     category = discord.utils.get(member.guild.categories, id=id)
     existing_channel = discord.utils.get(category.channels, name=channel_name)
-    if existing_channel:
-        await member.add_roles(existing_channel)
+    if not existing_channel:
+        if role is not None:
+            overwrites = {
+                member.guild.default_role: discord.PermissionOverwrite(read_messages=False),
+                role: discord.PermissionOverwrite(
+                    read_messages=True, send_messages=True)
+            }
+            new_channel = await category.create_text_channel(name=channel_name, overwrites=overwrites)
+        else:
+            print('New channel: %s created' % new_channel)
     else:
-        new_channel = await category.create_text_channel(name=channel_name)
-        await member.add_roles(new_channel)
+        print('Channel already exists: %s' % channel_name)
 
 
 async def handle_pro_role_change(before, after):
