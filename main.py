@@ -95,7 +95,16 @@ async def sendEmbed(request: Request):
     body = await request.json()
     channel = client.get_channel(body["channel"])
     embed = discord.Embed(
-        title=body["title"], description=body["description"], color=body["color"]
+        title=body["title"],
+        description=body["description"],
+        color=discord.Color.blue(),
     )
+    embed.add_field(name="ASIN", value=body["asin"], inline=True)
+    embed.add_field(name="ROI", value=body["roi"], inline=True)
+    embed.add_field(name="category", value=body["category"], inline=True)
+    embed.add_field(name="price", value=body["price"], inline=True)
+    embed.add_field(name="discount codes", value=body["discount codes"], inline=True)
+    embed.set_thumbnail(url="https://i.imgur.com/axLm3p6.jpeg")
+    embed.set_footer(text="LeadBot by UpSource Labs")
     await channel.send(embed=embed)
     return {"status": "ok"}
