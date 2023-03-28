@@ -30,6 +30,27 @@ async def ping(ctx):
     await ctx.send("Pong!")
 
 
+@client.command()
+async def member_counts(ctx):
+    basicgroups = [
+        f"{r.name}: {len(r.members)}"
+        for r in ctx.guild.roles
+        if r.name.startswith("basic-group")
+    ]
+    progroups = [
+        f"{r.name}: {len(r.members)}"
+        for r in ctx.guild.roles
+        if r.name.startswith("pro-group")
+    ]
+    await ctx.send(
+        "Basic Members:\n"
+        + "\n".join(basicgroups)
+        + "\n"
+        + "Pro Members:\n"
+        + "\n".join(progroups)
+    )
+
+
 client.run(os.environ["DISCORD_TOKEN"])
 
 
