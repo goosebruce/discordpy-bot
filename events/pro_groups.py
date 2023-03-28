@@ -54,7 +54,8 @@ async def handle_pro_role_change(before, after) -> None:
                 else:
                     pro_group_num += 1
             new_role = await after.guild.create_role(
-                name=f"Pro Group - {pro_group_num}", color=discord.Color.random()
+                name=f"{config['pro_role_suffix']}{pro_group_num}",
+                color=discord.Color.random(),
             )
             await new_role.edit(
                 position=after.guild.get_role(after.guild.id).position + 1
