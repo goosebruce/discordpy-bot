@@ -50,8 +50,10 @@ async def handle_pro_role_change(before, after) -> None:
             print("Member does not have pro group role")
             pro_group_num = 1
             for role in pro_groups.values():
+                print(role)
                 if len(role.members) < 5:
                     await after.add_roles(role)
+                    print(f"Added {role} to")
                     await add_pro_group_channel(after, role)
                     return
                 else:
