@@ -33,6 +33,18 @@ async def rules(interaction: discord.Interaction) -> None:
     await interaction.response.send_message(f"{rules}")
 
 
+@client.tree.command(
+    description="Get the member counts for all basic and pro groups"
+)  # removed the name param because it will raise an error as it is the same that the async function
+async def rules(interaction: discord.Interaction) -> None:
+    rules = (
+        "1. Don't say bad words",
+        "2. Respect other people",
+        "3. You mustn't speak loud in voice channels",
+    )
+    await interaction.response.send_message(f"{rules}")
+
+
 @client.command()
 @is_owner()
 async def sync(ctx: Context) -> None:
@@ -40,17 +52,8 @@ async def sync(ctx: Context) -> None:
     await ctx.reply("{} commands synced".format(len(synced)))
 
 
-@client.event
-async def on_ready():
-    print("Bot is ready")
-
-
-@client.event
-async def on_member_update(before, after):
-    await pro_groups.handle_pro_role_change(before, after)
-
-
 @client.command()
+@is_owner()
 async def member_counts(ctx):
     basicgroups = [
         f"{r.name}: {len(r.members)}"
@@ -62,13 +65,31 @@ async def member_counts(ctx):
         for r in ctx.guild.roles
         if r.name.startswith("pro-group")
     ]
-    await ctx.send(
+    privategroups = [
+        f"{r.name}: {len(r.members)}"
+        for r in ctx.guild.roles
+        if r.name.startswith("private")
+    ]
+    await ctx.reply(
         "Basic Members:\n"
-        + "\n".join(basicgroups)
-        + "\n"
+        + "\n-".join(basicgroups)
+        + "\n------------------"
         + "Pro Members:\n"
-        + "\n".join(progroups)
+        + "\n-".join(progroups)
+        + "\n------------------"
+        + "Private Members:\n"
+        + "\n-".join(privategroups)
     )
+
+
+@client.event
+async def on_ready():
+    print("Bot is ready")
+
+
+@client.event
+async def on_member_update(before, after):
+    await pro_groups.handle_pro_role_change(before, after)
 
 
 client.run(os.environ["DISCORD_TOKEN"])

@@ -1,8 +1,16 @@
 {
     "max_pro_members_per_group": 2,
     "max_basic_members_per_group": 10,
-    "pro_channel_suffix": "leads-pro-group-",
-    "pro_role_suffix": "pro-group-",
+    "pro_channel_pre": "leads-pro-group-",
+    "pro_role_name": "Pro",
+    "pro_role_pre": "pro-group-",
     "pro_role_id": "1076311851236872286",
-    "pro_group_category_id": "1077796703408762951"
+    "pro_group_category_id": 1077796703408762951,
+    "basic_role_pre": "basic-group-",
+    "basic_role_name": "Basic",
+    "basic_role_id": "1076311720886284358",
+    "basic_group_category_id": 1077796468515151913,
+    "private_group_category_id": 1077796468515151913,
+    "private_group_role": "Private",
+    "private_group_pre": "priv"
 }
