@@ -14,8 +14,9 @@ from events import pro_groups
 
 
 intents = discord.Intents.default()
-intent.members = True
-intent.message_content = True
+intents.members = True
+intents.message_content = True
+
 client = commands.Bot(intents=intents, command_prefix="!")
 
 
