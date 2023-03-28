@@ -6,16 +6,36 @@ from pydantic import BaseModel
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from discord_slash import SlashCommand
+from sqlalchemy import Column, Integer, Text
+from discord import Interaction
+from discord.ext.commands import is_owner, Context
+
 from events import pro_groups
 
 
 intents = discord.Intents.default()
 intents.members = True
 client = commands.Bot(intents=intents)
-slash = SlashCommand(
-    client, sync_commands=True
-)  # Declares slash commands through the client.
+
+
+# if slash command isn't in a cog
+@client.tree.command(
+    description="Shows the server rules"
+)  # removed the name param because it will raise an error as it is the same that the async function
+async def rules(interaction: discord.Interaction) -> None:
+    rules = (
+        "1. Don't say bad words",
+        "2. Respect other people",
+        "3. You mustn't speak loud in voice channels",
+    )
+    await interaction.response.send_message(f"{rules}")
+
+
+@client.command()
+@is_owner()
+async def sync(ctx: Context) -> None:
+    synced = await client.tree.sync()
+    await ctx.reply("{} commands synced".format(len(synced)))
 
 
 @client.event
@@ -26,11 +46,6 @@ async def on_ready():
 @client.event
 async def on_member_update(before, after):
     await pro_groups.handle_pro_role_change(before, after)
-
-
-@slash.slash(name="ping")
-async def _ping(ctx):
-    await ctx.send("Pong!")
 
 
 @client.command()
