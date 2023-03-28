@@ -53,16 +53,16 @@ async def handle_pro_role_change(before, after) -> None:
                     return
                 else:
                     pro_group_num += 1
-            new_role = await after.guild.create_role(
-                name=f"{config['pro_role_suffix']}{pro_group_num}",
-                color=discord.Color.random(),
-            )
-            await new_role.edit(
-                position=after.guild.get_role(after.guild.id).position + 1
-            )
-            await after.add_roles(new_role)
-            pro_groups[new_role.id] = new_role
-            await add_pro_group_channel(after, new_role)
+                    new_role = await after.guild.create_role(
+                        name=f"{config['pro_role_suffix']}{pro_group_num}",
+                        color=discord.Color.random(),
+                    )
+                    await new_role.edit(
+                        position=after.guild.get_role(after.guild.id).position + 1
+                    )
+                    await after.add_roles(new_role)
+                    pro_groups[new_role.id] = new_role
+                    await add_pro_group_channel(after, new_role)
 
 
 async def remove_pro_group_channel(member, role) -> None:
