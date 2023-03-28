@@ -33,18 +33,6 @@ async def rules(interaction: discord.Interaction) -> None:
     await interaction.response.send_message(f"{rules}")
 
 
-@client.tree.command(
-    description="Get the member counts for all basic and pro groups"
-)  # removed the name param because it will raise an error as it is the same that the async function
-async def rules(interaction: discord.Interaction) -> None:
-    rules = (
-        "1. Don't say bad words",
-        "2. Respect other people",
-        "3. You mustn't speak loud in voice channels",
-    )
-    await interaction.response.send_message(f"{rules}")
-
-
 @client.command()
 @is_owner()
 async def sync(ctx: Context) -> None:
