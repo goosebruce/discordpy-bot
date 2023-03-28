@@ -42,11 +42,10 @@ async def handle_pro_role_change(before, after) -> None:
         for role in pro_groups.values():
             if after in role.members:
                 await after.remove_roles(role)
-                await remove_pro_group_channel(after, role)
         return
     if pro_role not in before.roles:
         # Pro role was added, assign member to pro group
-        if "Pro Group" not in [r.name for r in after.roles]:
+        if "pro-group" not in [r.name for r in after.roles]:
             pro_group_num = 1
             for role in pro_groups.values():
                 if len(role.members) < 5:
@@ -65,11 +64,3 @@ async def handle_pro_role_change(before, after) -> None:
                     await after.add_roles(new_role)
                     pro_groups[new_role.id] = new_role
                     await add_pro_group_channel(after, new_role)
-
-
-async def remove_pro_group_channel(member, role) -> None:
-    channel_name = f"Leads - {role.name}"
-    existing_channel = discord.utils.get(member.guild.channels, name=channel_name)
-    if existing_channel:
-        await member.remove_roles(existing_channel)
-        await existing_channel.delete()
