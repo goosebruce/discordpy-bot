@@ -65,3 +65,8 @@ async def handle_pro_role_change(before, after) -> None:
                     await after.add_roles(new_role)
                     pro_groups[new_role.id] = new_role
                     await add_pro_group_channel(after, new_role)
+        else:
+            print("Member already has pro group role")
+
+    else:
+        print("Member already has pro role")
