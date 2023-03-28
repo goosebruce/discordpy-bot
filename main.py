@@ -6,13 +6,16 @@ from pydantic import BaseModel
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-
+from discord_slash import SlashCommand
 from events import pro_groups
 
 
 intents = discord.Intents.default()
 intents.members = True
-client = commands.Bot(command_prefix="!", intents=intents)
+client = commands.Bot(intents=intents)
+slash = SlashCommand(
+    client, sync_commands=True
+)  # Declares slash commands through the client.
 
 
 @client.event
@@ -25,8 +28,8 @@ async def on_member_update(before, after):
     await pro_groups.handle_pro_role_change(before, after)
 
 
-@client.command()
-async def ping(ctx):
+@slash.slash(name="ping")
+async def _ping(ctx):
     await ctx.send("Pong!")
 
 
