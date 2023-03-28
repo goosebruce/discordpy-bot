@@ -34,6 +34,8 @@ async def add_pro_group_channel(member, role) -> None:
 
 
 async def handle_pro_role_change(before, after) -> None:
+    print("member change event triggered")
+    print(after.roles)
     pro_role = discord.utils.get(after.roles, name="Pro")
     if pro_role is None:
         # Pro role was removed, remove all pro group roles from member
