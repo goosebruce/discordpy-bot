@@ -14,8 +14,6 @@ intents = discord.Intents.default()
 intents.members = True
 client = commands.Bot(command_prefix="!", intents=intents)
 
-pro_groups.client = client
-
 
 @client.event
 async def on_ready():
