@@ -38,8 +38,9 @@ async def handle_pro_role_change(before, after) -> None:
     pro_role = discord.utils.get(after.roles, name="Pro")
     if pro_role is None:
         # Pro role was removed, remove all pro group roles from member
-        for role in pro_groups.values():
-            if after in role.members:
+        for role in after.roles:
+            if role.name.startswith(config["pro_role_suffix"]):
+                print(f"Removing {role} from {after}")
                 await after.remove_roles(role)
         return
     if pro_role not in before.roles:
