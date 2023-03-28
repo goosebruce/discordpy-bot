@@ -13,6 +13,7 @@ async def add_pro_group_channel(member, role) -> None:
     print(member.guild.categories)
     category = discord.utils.get(member.guild.categories, id=id)
     existing_channel = discord.utils.get(category.channels, name=channel_name)
+    print(category.channels)
     print(existing_channel)
     if existing_channel is None:
         if role is not None:
