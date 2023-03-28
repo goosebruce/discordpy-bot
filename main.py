@@ -10,7 +10,7 @@ from sqlalchemy import Column, Integer, Text
 from discord import Interaction
 from discord.ext.commands import is_owner, Context
 
-from events import pro_groups
+from events import basic_groups, pro_groups, private_groups
 
 
 intents = discord.Intents.default()
@@ -77,7 +77,17 @@ async def on_ready():
 
 @client.event
 async def on_member_update(before, after):
-    await pro_groups.handle_pro_role_change(before, after)
+    basic_role = discord.utils.get(after.guild.roles, name="Basic")
+    pro_role = discord.utils.get(after.guild.roles, name="Pro")
+    private_role = discord.utils.get(after.guild.roles, name="Private")
+    if basic_role in after.roles and basic_role not in before.roles:
+        await basic_groups.handle_basic_role_change(before, after)
+    elif pro_role in after.roles and pro_role not in before.roles:
+        await pro_groups.handle_pro_role_change(before, after)
+    elif private_role in after.roles and private_role not in before.roles:
+        await private_groups.handle_private_role_change(before, after)
+    else:
+        print("No notable role changed")
 
 
 client.run(os.environ["DISCORD_TOKEN"])
