@@ -6,8 +6,8 @@ with open("config.json") as f:
 
 
 async def add_private_group_channel(member) -> None:
-    lead_channel_name = f"{config['priv-leads-removed']}-leads-{member.name}"
-    feedback_channel_name = f"{config['priv-leads-removed']}-feedback-{member.name}"
+    lead_channel_name = f"{config['private_group_pre']}-leads-{member.name}"
+    feedback_channel_name = f"{config['private_group_pre']}-feedback-{member.name}"
     id = config["private_group_category_id"]
     category = discord.utils.get(member.guild.categories, id=id)
     existing_lead_channel = discord.utils.get(category.channels, name=lead_channel_name)
