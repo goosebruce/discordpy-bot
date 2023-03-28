@@ -15,7 +15,7 @@ from events import pro_groups
 
 intents = discord.Intents.default()
 intents.members = True
-client = commands.Bot(intents=intents, command_prefix="/")
+client = commands.Bot(intents=intents, command_prefix="!")
 
 
 # if slash command isn't in a cog
