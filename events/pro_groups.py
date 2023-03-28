@@ -45,7 +45,7 @@ async def handle_pro_role_change(before, after) -> None:
         return
     if pro_role not in before.roles:
         # Pro role was added, assign member to pro group
-        if "pro-group" not in [r.name for r in after.roles]:
+        if config["pro_role_suffix"] not in [r.name for r in after.roles]:
             pro_group_num = 1
             for role in pro_groups.values():
                 if len(role.members) < 5:
