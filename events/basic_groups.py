@@ -40,8 +40,8 @@ async def fetch_lead_group(api_key, user_id):
         async with session.get(url, headers=headers) as response:
             if response.status == 200:
                 data = await response.json()
-                print(data)
-                return data["lead group"]
+                print(data.response)
+                return data.response["lead group"]
 
             else:
                 print(f"Error fetching lead group: {response.status}")
