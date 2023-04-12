@@ -39,9 +39,9 @@ async def fetch_lead_group(api_key, user_id):
         headers = {"Authorization": f"Bearer {api_key}"}
         async with session.get(url, headers=headers) as response:
             if response.status == 200:
-                data = await response.json()["response"]
-                print(data["lead group"])
-                return response["lead group"]
+                data = await response.json()
+                print(data["response"]["lead group"])
+                return data["response"]["lead group"]
 
             else:
                 print(f"Error fetching lead group: {response.status}")
