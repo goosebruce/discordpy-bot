@@ -23,26 +23,6 @@ intents.message_content = True
 client = commands.Bot(intents=intents, command_prefix="!")
 
 
-# if slash command isn't in a cog
-@client.tree.command(
-    description="Shows the server rules"
-)  # removed the name param because it will raise an error as it is the same that the async function
-async def rules(interaction: discord.Interaction) -> None:
-    rules = (
-        "1. Don't say bad words",
-        "2. Respect other people",
-        "3. You mustn't speak loud in voice channels",
-    )
-    await interaction.response.send_message(f"{rules}")
-
-
-@client.command()
-@is_owner()
-async def sync(ctx: Context) -> None:
-    synced = await client.tree.sync()
-    await ctx.reply("{} commands synced".format(len(synced)))
-
-
 @client.event
 async def on_ready():
     print("Bot is ready")
