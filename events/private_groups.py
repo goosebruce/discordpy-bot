@@ -1,13 +1,34 @@
 import json
 import discord
+import aiohttp
+import os
 
 with open("config.json") as f:
     config = json.load(f)
 
 
+async def fetch_lead_group(api_key, user_id):
+    async with aiohttp.ClientSession() as session:
+        url = f"https://app.upsourcelabs.com/version-test/api/1.1/wf/getleadgroup?discord_id={user_id}"
+        headers = {"Authorization": f"Bearer {api_key}"}
+        async with session.get(url, headers=headers) as response:
+            if response.status == 200:
+                data = await response.json()
+                print(data["response"]["lead group"])
+                return data["response"]["lead group"]
+
+            else:
+                print(f"Error fetching lead group: {response.status}")
+                return None
+
+
 async def add_private_group_channel(member) -> None:
-    lead_channel_name = f"{config['private_group_pre']}-leads-{member.name}"
-    feedback_channel_name = f"{config['private_group_pre']}-feedback-{member.name}"
+    api_key = os.environ["bubble_api_key"]
+    user_id = str(member.id)
+    lead_group = await fetch_lead_group(api_key, user_id)
+
+    lead_channel_name = f"leads - {lead_group}"
+    feedback_channel_name = f"feedback-{lead_group}"
     id = config["private_group_category_id"]
     category = discord.utils.get(member.guild.categories, id=id)
     existing_lead_channel = discord.utils.get(category.channels, name=lead_channel_name)
